@@ -13,7 +13,7 @@ import { useHealthRecordStore } from '@/src/store/health-record-store'
 import { useReminderStore } from '@/src/store/reminder-store'
 import { formatAge, formatDate } from '@/src/lib/date-utils'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/src/components/ui/alert-dialog'
-import { Syringe, Stethoscope, Scale, Bell, Pencil, Trash2, Plus, ChevronRight } from 'lucide-react'
+import { Syringe, Stethoscope, Scale, Bell, Pencil, Trash2, ChevronRight } from 'lucide-react'
 
 const speciesLabel: Record<string, string> = {
   dog: '狗', cat: '猫', rabbit: '兔', bird: '鸟', reptile: '爬行类', fish: '鱼', other: '其他',
@@ -85,6 +85,34 @@ export default function PetDetailPage({ params }: { params: Promise<{ petId: str
           </div>
         </div>
 
+        {/* Quick-add shortcuts */}
+        <div className="flex gap-2 mb-5">
+          <Link href={`/pets/${petId}/records/new?type=medication`} className="flex-1">
+            <div className="flex flex-col items-center gap-1 py-3 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
+              <span className="text-xl">💊</span>
+              <span className="text-xs font-medium">记录用药</span>
+            </div>
+          </Link>
+          <Link href={`/pets/${petId}/records/new?type=vaccination`} className="flex-1">
+            <div className="flex flex-col items-center gap-1 py-3 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
+              <span className="text-xl">💉</span>
+              <span className="text-xs font-medium">记录疫苗</span>
+            </div>
+          </Link>
+          <Link href={`/pets/${petId}/records/new?type=vet_visit`} className="flex-1">
+            <div className="flex flex-col items-center gap-1 py-3 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
+              <span className="text-xl">🩺</span>
+              <span className="text-xs font-medium">记录就诊</span>
+            </div>
+          </Link>
+          <Link href={`/pets/${petId}/weight`} className="flex-1">
+            <div className="flex flex-col items-center gap-1 py-3 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
+              <span className="text-xl">⚖️</span>
+              <span className="text-xs font-medium">记录体重</span>
+            </div>
+          </Link>
+        </div>
+
         {/* Quick stats */}
         <div className="grid grid-cols-3 gap-3 mb-6">
           <div className="flex flex-col items-center p-3 rounded-xl border bg-card">
@@ -140,15 +168,6 @@ export default function PetDetailPage({ params }: { params: Promise<{ petId: str
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>
-        </div>
-
-        {/* Add record FAB */}
-        <div className="fixed bottom-20 right-4 z-30">
-          <Button asChild size="lg" className="rounded-full shadow-lg h-14 w-14 p-0">
-            <Link href={`/pets/${petId}/records/new`}>
-              <Plus className="h-6 w-6" />
-            </Link>
-          </Button>
         </div>
 
         {/* Delete */}

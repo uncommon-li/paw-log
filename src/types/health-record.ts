@@ -44,9 +44,10 @@ export interface MedicationRecord extends HealthRecordBase {
   frequency: string
   startDate: string
   endDate?: string
-  refillDate?: string  // drives reminder
+  refillDate?: string          // drives reminder
   prescribedBy?: string
   isOngoing: boolean
+  recurringIntervalDays?: number  // auto-reschedule: 30 = monthly, 90 = quarterly, etc.
 }
 
 export interface WeightEntry extends HealthRecordBase {
