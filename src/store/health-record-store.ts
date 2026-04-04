@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { v4 as uuidv4 } from 'uuid'
 import { HealthRecord, HealthRecordType } from '@/src/types/health-record'
+import { ssrSafeStorage } from '@/src/lib/zustand-storage'
 
 interface HealthRecordStore {
   records: HealthRecord[]
@@ -54,6 +55,6 @@ export const useHealthRecordStore = create<HealthRecordStore>()(
         set((s) => ({ records: s.records.filter((r) => r.petId !== petId) }))
       },
     }),
-    { name: 'paw-log-records' }
+    { name: 'paw-log-records', storage: ssrSafeStorage }
   )
 )

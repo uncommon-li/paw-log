@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { v4 as uuidv4 } from 'uuid'
 import { Pet } from '@/src/types/pet'
+import { ssrSafeStorage } from '@/src/lib/zustand-storage'
 
 interface PetStore {
   pets: Pet[]
@@ -37,6 +38,6 @@ export const usePetStore = create<PetStore>()(
 
       getPet: (id) => get().pets.find((p) => p.id === id),
     }),
-    { name: 'paw-log-pets' }
+    { name: 'paw-log-pets', storage: ssrSafeStorage }
   )
 )

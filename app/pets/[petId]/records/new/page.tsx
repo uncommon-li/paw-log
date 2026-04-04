@@ -1,18 +1,17 @@
 "use client"
 
-import { use, useState } from 'react'
+import { use, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { TopBar } from '@/src/components/layout/TopBar'
 import { PageShell } from '@/src/components/layout/PageShell'
-import { RecordTypeSelector } from '@/src/components/records/RecordTypeSelector'
+import { RecordTypeSelector, recordTypeMeta } from '@/src/components/records/RecordTypeSelector'
 import { RecordForm } from '@/src/components/records/RecordForms'
 import { useHealthRecordStore } from '@/src/store/health-record-store'
 import { HealthRecord, HealthRecordType } from '@/src/types/health-record'
 import { usePetStore } from '@/src/store/pet-store'
-import { recordTypeMeta } from '@/src/components/records/RecordTypeSelector'
 
-export default function NewRecordPage({ params }: { params: Promise<{ petId: string }> }) {
-  const { petId } = use(params)
+// useSearchParams must be inside a Suspense boundary
+function NewRecordContent({ petId }: { petId: string }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const pet = usePetStore((s) => s.getPet(petId))
@@ -49,5 +48,14 @@ export default function NewRecordPage({ params }: { params: Promise<{ petId: str
         )}
       </PageShell>
     </>
+  )
+}
+
+export default function NewRecordPage({ params }: { params: Promise<{ petId: string }> }) {
+  const { petId } = use(params)
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-32 text-muted-foreground text-sm">加载中...</div>}>
+      <NewRecordContent petId={petId} />
+    </Suspense>
   )
 }

@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import { v4 as uuidv4 } from 'uuid'
 import { Reminder, ReminderStatus } from '@/src/types/reminder'
 import { deriveReminders } from '@/src/lib/reminder-sync'
+import { ssrSafeStorage } from '@/src/lib/zustand-storage'
 import { HealthRecord } from '@/src/types/health-record'
 
 interface ReminderStore {
@@ -97,6 +98,6 @@ export const useReminderStore = create<ReminderStore>()(
         })
       },
     }),
-    { name: 'paw-log-reminders' }
+    { name: 'paw-log-reminders', storage: ssrSafeStorage }
   )
 )
