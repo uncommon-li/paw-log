@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
 import "./globals.css";
 import { BottomNav } from '@/src/components/layout/BottomNav'
 import { ReminderSyncProvider } from '@/src/components/ReminderSyncProvider'
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Paw Log · 宠物健康档案",
@@ -20,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh" className={`${geistSans.variable}`}>
+    <html lang="zh">
       <body className="antialiased">
         <ReminderSyncProvider>
           {children}
