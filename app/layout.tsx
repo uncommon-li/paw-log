@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { BottomNav } from '@/src/components/layout/BottomNav'
-import { ReminderSyncProvider } from '@/src/components/ReminderSyncProvider'
+import { NoSSRShell } from '@/src/components/layout/NoSSRShell'
 
 export const metadata: Metadata = {
   title: "Paw Log · 宠物健康档案",
@@ -16,10 +15,9 @@ export default function RootLayout({
   return (
     <html lang="zh">
       <body className="antialiased">
-        <ReminderSyncProvider>
+        <NoSSRShell>
           {children}
-          <BottomNav />
-        </ReminderSyncProvider>
+        </NoSSRShell>
       </body>
     </html>
   );
