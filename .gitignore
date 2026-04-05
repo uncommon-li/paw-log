@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Capacitor build artifacts (ios/ and android/ dirs themselves ARE committed)
+ios/App/Pods/
+ios/App/App.xcworkspace/xcshareddata/
+android/.gradle/
+android/build/
+android/app/build/

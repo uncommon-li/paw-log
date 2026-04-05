@@ -21,10 +21,12 @@ export function TopBar({ title, showBack, backHref, right, className }: TopBarPr
   }
 
   return (
-    <header className={cn(
-      'sticky top-0 z-30 bg-gradient-to-r from-pink-400 via-fuchsia-400 to-purple-400 shadow-md shadow-pink-200/50',
-      className
-    )}>
+    <header
+      className={cn(
+        'sticky top-0 z-30 bg-gradient-to-r from-pink-400 via-fuchsia-400 to-purple-400 shadow-md shadow-pink-200/50 safe-area-pt',
+        className
+      )}
+    >
       <div className="flex items-center h-14 px-4 max-w-2xl mx-auto">
         {showBack && (
           <button

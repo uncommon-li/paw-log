@@ -28,7 +28,7 @@ export function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-40 safe-area-pb">
-      <div className="mx-3 mb-3 bg-white/90 backdrop-blur-md rounded-3xl shadow-lg shadow-pink-200/50 border border-pink-100 flex">
+      <div className="mx-3 mb-2 bg-white/90 backdrop-blur-md rounded-3xl shadow-lg shadow-pink-200/50 border border-pink-100 flex">
         {tabs.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
           const showBadge = href === '/reminders' && activeCount > 0

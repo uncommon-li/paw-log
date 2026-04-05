@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: 'export',
-  basePath: '/paw-log',
+  basePath: process.env.BUILD_TARGET === 'web' ? '/paw-log' : '',
   images: { unoptimized: true },
 };
 
