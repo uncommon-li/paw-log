@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useState } from 'react'
+import { use, useState, useMemo } from 'react'
 import Link from 'next/link'
 import { TopBar } from '@/src/components/layout/TopBar'
 import { PageShell } from '@/src/components/layout/PageShell'
@@ -141,7 +141,12 @@ function RecordDetail({ record, onClose, onDelete }: { record: HealthRecord; onC
 export default function RecordsPage({ params }: { params: Promise<{ petId: string }> }) {
   const { petId } = use(params)
   const pet = usePetStore((s) => s.getPet(petId))
-  const records = useHealthRecordStore((s) => s.getRecordsByPet(petId))
+  const allRecords = useHealthRecordStore((s) => s.records)
+  const records = useMemo(() =>
+    allRecords
+      .filter((r) => r.petId === petId)
+      .sort((a, b) => b.recordedAt.localeCompare(a.recordedAt))
+  , [allRecords, petId])
   const deleteRecord = useHealthRecordStore((s) => s.deleteRecord)
   const [selected, setSelected] = useState<HealthRecord | null>(null)
   const [filterType, setFilterType] = useState<HealthRecordType | 'all'>('all')

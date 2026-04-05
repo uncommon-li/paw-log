@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { LayoutDashboard, PawPrint, Bell, Settings } from 'lucide-react'
 import { cn } from '@/src/lib/utils'
 import { useReminderStore } from '@/src/store/reminder-store'
+import { useMemo } from 'react'
 
 const tabs = [
   { href: '/dashboard', label: '首页', icon: LayoutDashboard },
@@ -15,7 +16,15 @@ const tabs = [
 
 export function BottomNav() {
   const pathname = usePathname()
-  const activeCount = useReminderStore((s) => s.getAllActive()).length
+  const reminders = useReminderStore((s) => s.reminders)
+  const activeCount = useMemo(() => {
+    const now = new Date()
+    return reminders.filter((r) => {
+      if (r.status === 'completed') return false
+      if (r.status === 'snoozed' && r.snoozeUntil && new Date(r.snoozeUntil) > now) return false
+      return true
+    }).length
+  }, [reminders])
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-40 bg-background border-t safe-area-pb">

@@ -11,9 +11,17 @@ export interface GroupedReminders {
 }
 
 export function useReminders(petId?: string): GroupedReminders {
-  const allActive = useReminderStore((s) => s.getAllActive())
   const allReminders = useReminderStore((s) => s.reminders)
   const now = new Date()
+
+  const allActive = useMemo(() => {
+    return allReminders.filter((r) => {
+      if (r.status === 'completed') return false
+      if (r.status === 'snoozed' && r.snoozeUntil && new Date(r.snoozeUntil) > now) return false
+      return true
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allReminders])
 
   const active = useMemo(() => {
     const base = petId ? allActive.filter((r) => r.petId === petId) : allActive

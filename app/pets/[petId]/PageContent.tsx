@@ -1,6 +1,6 @@
 "use client"
 
-import { use } from 'react'
+import { use, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { TopBar } from '@/src/components/layout/TopBar'
@@ -25,12 +25,26 @@ export default function PetDetailPage({ params }: { params: Promise<{ petId: str
 
   const pet = usePetStore((s) => s.getPet(petId))
   const deletePet = usePetStore((s) => s.deletePet)
-  const records = useHealthRecordStore((s) => s.getRecordsByPet(petId))
+  const allRecords = useHealthRecordStore((s) => s.records)
   const deleteByPet = useHealthRecordStore((s) => s.deleteByPet)
   const deleteRemindersByPet = useReminderStore((s) => s.deleteByPet)
-  const activeReminders = useReminderStore((s) =>
-    s.getAllActive().filter((r) => r.petId === petId)
-  )
+  const allReminders = useReminderStore((s) => s.reminders)
+
+  const records = useMemo(() =>
+    allRecords
+      .filter((r) => r.petId === petId)
+      .sort((a, b) => b.recordedAt.localeCompare(a.recordedAt))
+  , [allRecords, petId])
+
+  const activeReminders = useMemo(() => {
+    const now = new Date()
+    return allReminders.filter((r) => {
+      if (r.petId !== petId) return false
+      if (r.status === 'completed') return false
+      if (r.status === 'snoozed' && r.snoozeUntil && new Date(r.snoozeUntil) > now) return false
+      return true
+    })
+  }, [allReminders, petId])
 
   if (!pet) {
     return (

@@ -4,6 +4,7 @@ import { TopBar } from '@/src/components/layout/TopBar'
 import { PageShell } from '@/src/components/layout/PageShell'
 import { PetCard } from '@/src/components/pets/PetCard'
 import { ReminderCard } from '@/src/components/reminders/ReminderCard'
+import { useMemo } from 'react'
 import { usePetStore } from '@/src/store/pet-store'
 import { useReminderStore } from '@/src/store/reminder-store'
 import Link from 'next/link'
@@ -24,7 +25,15 @@ function sortByUrgency(reminders: Reminder[]) {
 
 export default function DashboardPage() {
   const pets = usePetStore((s) => s.pets)
-  const activeReminders = useReminderStore((s) => s.getAllActive())
+  const allReminders = useReminderStore((s) => s.reminders)
+  const activeReminders = useMemo(() => {
+    const now = new Date()
+    return allReminders.filter((r) => {
+      if (r.status === 'completed') return false
+      if (r.status === 'snoozed' && r.snoozeUntil && new Date(r.snoozeUntil) > now) return false
+      return true
+    })
+  }, [allReminders])
 
   // Medication reminders that are due today/overdue — top CTA
   const urgentMeds = sortByUrgency(
