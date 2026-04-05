@@ -27,8 +27,8 @@ export function BottomNav() {
   }, [reminders])
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 bg-background border-t safe-area-pb">
-      <div className="flex">
+    <nav className="fixed bottom-0 inset-x-0 z-40 safe-area-pb">
+      <div className="mx-3 mb-3 bg-white/90 backdrop-blur-md rounded-3xl shadow-lg shadow-pink-200/50 border border-pink-100 flex">
         {tabs.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
           const showBadge = href === '/reminders' && activeCount > 0
@@ -36,20 +36,24 @@ export function BottomNav() {
             <Link
               key={href}
               href={href}
-              className={cn(
-                'flex-1 flex flex-col items-center gap-0.5 py-2 text-xs transition-colors',
-                active ? 'text-primary' : 'text-muted-foreground'
-              )}
+              className="flex-1 flex flex-col items-center py-2 gap-0.5"
             >
-              <span className="relative">
-                <Icon className="h-5 w-5" />
+              <span className={cn(
+                'relative flex items-center justify-center w-10 h-8 rounded-2xl transition-all',
+                active
+                  ? 'bg-gradient-to-r from-pink-400 to-fuchsia-400 shadow-md shadow-pink-200 scale-110'
+                  : ''
+              )}>
+                <Icon className={cn('h-5 w-5 transition-colors', active ? 'text-white' : 'text-muted-foreground')} />
                 {showBadge && (
-                  <span className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-destructive text-[9px] text-white flex items-center justify-center font-bold">
+                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-gradient-to-r from-rose-400 to-pink-500 text-[9px] text-white flex items-center justify-center font-bold shadow-sm">
                     {activeCount > 9 ? '9+' : activeCount}
                   </span>
                 )}
               </span>
-              <span>{label}</span>
+              <span className={cn('text-[10px] font-semibold transition-colors', active ? 'text-primary' : 'text-muted-foreground')}>
+                {label}
+              </span>
             </Link>
           )
         })}

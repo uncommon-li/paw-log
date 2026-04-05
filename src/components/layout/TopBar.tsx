@@ -21,19 +21,22 @@ export function TopBar({ title, showBack, backHref, right, className }: TopBarPr
   }
 
   return (
-    <header className={cn('sticky top-0 z-30 bg-background border-b', className)}>
+    <header className={cn(
+      'sticky top-0 z-30 bg-gradient-to-r from-pink-400 via-fuchsia-400 to-purple-400 shadow-md shadow-pink-200/50',
+      className
+    )}>
       <div className="flex items-center h-14 px-4 max-w-2xl mx-auto">
         {showBack && (
           <button
             onClick={handleBack}
-            className="mr-2 -ml-2 p-2 rounded-md hover:bg-muted transition-colors"
+            className="mr-2 -ml-2 p-2 rounded-full hover:bg-white/20 transition-colors text-white"
             aria-label="返回"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
         )}
-        <h1 className="flex-1 font-semibold text-base truncate">{title}</h1>
-        {right && <div className="ml-2">{right}</div>}
+        <h1 className="flex-1 font-bold text-base truncate text-white drop-shadow-sm">{title}</h1>
+        {right && <div className="ml-2 text-white [&_button]:text-white [&_svg]:stroke-white">{right}</div>}
       </div>
     </header>
   )

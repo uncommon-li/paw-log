@@ -8,7 +8,7 @@ interface PageShellProps {
 
 export function PageShell({ children, className, noPadding }: PageShellProps) {
   return (
-    <main className={cn('max-w-2xl mx-auto pb-24', !noPadding && 'px-4 pt-4', className)}>
+    <main className={cn('max-w-2xl mx-auto pb-28', !noPadding && 'px-4 pt-4', className)}>
       {children}
     </main>
   )
