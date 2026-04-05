@@ -1,7 +1,6 @@
 1:"$Sreact.fragment"
-2:I[39723,["/paw-log/_next/static/chunks/15r1t-iu3p~py.js","/paw-log/_next/static/chunks/0n4z.7yu76je-.js","/paw-log/_next/static/chunks/0pgbqcy319h53.js","/paw-log/_next/static/chunks/0~c.4hoydby4f.js","/paw-log/_next/static/chunks/15cjeb-fkdyr-.js","/paw-log/_next/static/chunks/13u9d-~ux648o.js","/paw-log/_next/static/chunks/109nrqf2i0nuf.js"],"default"]
-4:I[97367,["/paw-log/_next/static/chunks/15r1t-iu3p~py.js","/paw-log/_next/static/chunks/0n4z.7yu76je-.js"],"OutletBoundary"]
-5:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"params":"$@3"}],[["$","script","script-0",{"src":"/paw-log/_next/static/chunks/0pgbqcy319h53.js","async":true}],["$","script","script-1",{"src":"/paw-log/_next/static/chunks/0~c.4hoydby4f.js","async":true}],["$","script","script-2",{"src":"/paw-log/_next/static/chunks/15cjeb-fkdyr-.js","async":true}],["$","script","script-3",{"src":"/paw-log/_next/static/chunks/13u9d-~ux648o.js","async":true}],["$","script","script-4",{"src":"/paw-log/_next/static/chunks/109nrqf2i0nuf.js","async":true}]],["$","$L4",null,{"children":["$","$5",null,{"name":"Next.MetadataOutlet","children":"$@6"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"on8qwg9rBGkpmkTZlnWnS"}
-3:{"petId":"_"}
-6:null
+2:I[39723,["/paw-log/_next/static/chunks/15r1t-iu3p~py.js","/paw-log/_next/static/chunks/0n4z.7yu76je-.js","/paw-log/_next/static/chunks/069h6rnyb58to.js","/paw-log/_next/static/chunks/0~d8d6xz24d4d.js","/paw-log/_next/static/chunks/0fw4t5frkmxsi.js","/paw-log/_next/static/chunks/13u9d-~ux648o.js","/paw-log/_next/static/chunks/109nrqf2i0nuf.js"],"default"]
+3:I[97367,["/paw-log/_next/static/chunks/15r1t-iu3p~py.js","/paw-log/_next/static/chunks/0n4z.7yu76je-.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{}],[["$","script","script-0",{"src":"/paw-log/_next/static/chunks/069h6rnyb58to.js","async":true}],["$","script","script-1",{"src":"/paw-log/_next/static/chunks/0~d8d6xz24d4d.js","async":true}],["$","script","script-2",{"src":"/paw-log/_next/static/chunks/0fw4t5frkmxsi.js","async":true}],["$","script","script-3",{"src":"/paw-log/_next/static/chunks/13u9d-~ux648o.js","async":true}],["$","script","script-4",{"src":"/paw-log/_next/static/chunks/109nrqf2i0nuf.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"bnT3OBJO1W5tZg5WYVrby"}
+5:null
