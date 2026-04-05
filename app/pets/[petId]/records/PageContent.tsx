@@ -1,6 +1,7 @@
 "use client"
 
-import { use, useState, useMemo } from 'react'
+import { useState, useMemo, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { TopBar } from '@/src/components/layout/TopBar'
 import { PageShell } from '@/src/components/layout/PageShell'
@@ -11,6 +12,7 @@ import { HealthRecord, HealthRecordType } from '@/src/types/health-record'
 import { usePetStore } from '@/src/store/pet-store'
 import { Button } from '@/src/components/ui/button'
 import { Plus } from 'lucide-react'
+import { petHref } from '@/src/lib/pet-path'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/src/components/ui/sheet'
 import { formatDate } from '@/src/lib/date-utils'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/src/components/ui/alert-dialog'
@@ -138,8 +140,9 @@ function RecordDetail({ record, onClose, onDelete }: { record: HealthRecord; onC
   )
 }
 
-export default function RecordsPage({ params }: { params: Promise<{ petId: string }> }) {
-  const { petId } = use(params)
+function RecordsContent() {
+  const searchParams = useSearchParams()
+  const petId = searchParams.get('id') ?? ''
   const pet = usePetStore((s) => s.getPet(petId))
   const allRecords = useHealthRecordStore((s) => s.records)
   const records = useMemo(() =>
@@ -158,10 +161,10 @@ export default function RecordsPage({ params }: { params: Promise<{ petId: strin
       <TopBar
         title={`${pet?.name ?? ''} 的健康记录`}
         showBack
-        backHref={`/pets/${petId}`}
+        backHref={petHref(petId)}
         right={
           <Button asChild size="sm" variant="ghost">
-            <Link href={`/pets/${petId}/records/new`}><Plus className="h-5 w-5" /></Link>
+            <Link href={petHref(petId, 'records/new')}><Plus className="h-5 w-5" /></Link>
           </Button>
         }
       />
@@ -207,5 +210,13 @@ export default function RecordsPage({ params }: { params: Promise<{ petId: strin
         </SheetContent>
       </Sheet>
     </>
+  )
+}
+
+export default function RecordsPage() {
+  return (
+    <Suspense fallback={null}>
+      <RecordsContent />
+    </Suspense>
   )
 }

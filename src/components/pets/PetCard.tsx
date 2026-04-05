@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Pet } from '@/src/types/pet'
+import { petHref } from '@/src/lib/pet-path'
 import { PetAvatar } from './PetAvatar'
 import { Badge } from '@/src/components/ui/badge'
 import { useReminders } from '@/src/hooks/use-reminders'
@@ -21,7 +22,7 @@ export function PetCard({ pet }: PetCardProps) {
   const urgentCount = overdue.length + thisWeek.length
 
   return (
-    <Link href={`/pets/${pet.id}`}>
+    <Link href={petHref(pet.id)}>
       <div className="flex items-center gap-3 p-4 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
         <PetAvatar name={pet.name} species={pet.species} avatarDataUrl={pet.avatarDataUrl} size="md" />
         <div className="flex-1 min-w-0">

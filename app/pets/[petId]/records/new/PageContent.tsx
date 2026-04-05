@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useState, Suspense } from 'react'
+import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { TopBar } from '@/src/components/layout/TopBar'
 import { PageShell } from '@/src/components/layout/PageShell'
@@ -8,13 +8,12 @@ import { RecordTypeSelector, recordTypeMeta } from '@/src/components/records/Rec
 import { RecordForm } from '@/src/components/records/RecordForms'
 import { useHealthRecordStore } from '@/src/store/health-record-store'
 import { HealthRecord, HealthRecordType } from '@/src/types/health-record'
-import { usePetStore } from '@/src/store/pet-store'
+import { petHref } from '@/src/lib/pet-path'
 
-// useSearchParams must be inside a Suspense boundary
-function NewRecordContent({ petId }: { petId: string }) {
+function NewRecordContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const pet = usePetStore((s) => s.getPet(petId))
+  const petId = searchParams.get('id') ?? ''
   const addRecord = useHealthRecordStore((s) => s.addRecord)
 
   const defaultType = (searchParams.get('type') as HealthRecordType) || undefined
@@ -22,7 +21,7 @@ function NewRecordContent({ petId }: { petId: string }) {
 
   const handleSubmit = (data: Omit<HealthRecord, 'id' | 'createdAt' | 'updatedAt'>) => {
     addRecord(data)
-    router.push(`/pets/${petId}/records`)
+    router.push(petHref(petId, 'records'))
   }
 
   return (
@@ -30,7 +29,7 @@ function NewRecordContent({ petId }: { petId: string }) {
       <TopBar
         title={recordType ? `添加${recordTypeMeta[recordType].label}记录` : '添加健康记录'}
         showBack
-        backHref={recordType ? undefined : `/pets/${petId}/records`}
+        backHref={recordType ? undefined : petHref(petId, 'records')}
       />
       <PageShell>
         {!recordType ? (
@@ -51,11 +50,10 @@ function NewRecordContent({ petId }: { petId: string }) {
   )
 }
 
-export default function NewRecordPage({ params }: { params: Promise<{ petId: string }> }) {
-  const { petId } = use(params)
+export default function NewRecordPage() {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center h-32 text-muted-foreground text-sm">加载中...</div>}>
-      <NewRecordContent petId={petId} />
+    <Suspense fallback={null}>
+      <NewRecordContent />
     </Suspense>
   )
 }

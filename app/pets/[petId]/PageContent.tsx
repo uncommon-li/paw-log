@@ -1,7 +1,7 @@
 "use client"
 
-import { use, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
+import { useMemo, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { TopBar } from '@/src/components/layout/TopBar'
 import { PageShell } from '@/src/components/layout/PageShell'
@@ -12,6 +12,7 @@ import { usePetStore } from '@/src/store/pet-store'
 import { useHealthRecordStore } from '@/src/store/health-record-store'
 import { useReminderStore } from '@/src/store/reminder-store'
 import { formatAge, formatDate } from '@/src/lib/date-utils'
+import { petHref } from '@/src/lib/pet-path'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/src/components/ui/alert-dialog'
 import { Syringe, Stethoscope, Scale, Bell, Pencil, Trash2, ChevronRight } from 'lucide-react'
 
@@ -19,8 +20,9 @@ const speciesLabel: Record<string, string> = {
   dog: '狗', cat: '猫', rabbit: '兔', bird: '鸟', reptile: '爬行类', fish: '鱼', other: '其他',
 }
 
-export default function PetDetailPage({ params }: { params: Promise<{ petId: string }> }) {
-  const { petId } = use(params)
+function PetDetailContent() {
+  const searchParams = useSearchParams()
+  const petId = searchParams.get('id') ?? ''
   const router = useRouter()
 
   const pet = usePetStore((s) => s.getPet(petId))
@@ -75,7 +77,7 @@ export default function PetDetailPage({ params }: { params: Promise<{ petId: str
         showBack
         backHref="/pets"
         right={
-          <Link href={`/pets/${petId}/edit`}>
+          <Link href={petHref(petId, 'edit')}>
             <Button size="sm" variant="ghost"><Pencil className="h-4 w-4" /></Button>
           </Link>
         }
@@ -101,25 +103,25 @@ export default function PetDetailPage({ params }: { params: Promise<{ petId: str
 
         {/* Quick-add shortcuts */}
         <div className="flex gap-2 mb-5">
-          <Link href={`/pets/${petId}/records/new?type=medication`} className="flex-1">
+          <Link href={petHref(petId, 'records/new', { type: 'medication' })} className="flex-1">
             <div className="flex flex-col items-center gap-1 py-3 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
               <span className="text-xl">💊</span>
               <span className="text-xs font-medium">记录用药</span>
             </div>
           </Link>
-          <Link href={`/pets/${petId}/records/new?type=vaccination`} className="flex-1">
+          <Link href={petHref(petId, 'records/new', { type: 'vaccination' })} className="flex-1">
             <div className="flex flex-col items-center gap-1 py-3 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
               <span className="text-xl">💉</span>
               <span className="text-xs font-medium">记录疫苗</span>
             </div>
           </Link>
-          <Link href={`/pets/${petId}/records/new?type=vet_visit`} className="flex-1">
+          <Link href={petHref(petId, 'records/new', { type: 'vet_visit' })} className="flex-1">
             <div className="flex flex-col items-center gap-1 py-3 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
               <span className="text-xl">🩺</span>
               <span className="text-xs font-medium">记录就诊</span>
             </div>
           </Link>
-          <Link href={`/pets/${petId}/weight`} className="flex-1">
+          <Link href={petHref(petId, 'weight')} className="flex-1">
             <div className="flex flex-col items-center gap-1 py-3 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
               <span className="text-xl">⚖️</span>
               <span className="text-xs font-medium">记录体重</span>
@@ -150,7 +152,7 @@ export default function PetDetailPage({ params }: { params: Promise<{ petId: str
 
         {/* Navigation links */}
         <div className="space-y-2 mb-8">
-          <Link href={`/pets/${petId}/records`} className="flex items-center justify-between p-4 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
+          <Link href={petHref(petId, 'records')} className="flex items-center justify-between p-4 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
             <div className="flex items-center gap-3">
               <Stethoscope className="h-5 w-5 text-green-500" />
               <div>
@@ -161,7 +163,7 @@ export default function PetDetailPage({ params }: { params: Promise<{ petId: str
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>
 
-          <Link href={`/pets/${petId}/weight`} className="flex items-center justify-between p-4 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
+          <Link href={petHref(petId, 'weight')} className="flex items-center justify-between p-4 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
             <div className="flex items-center gap-3">
               <Scale className="h-5 w-5 text-orange-500" />
               <div>
@@ -172,7 +174,7 @@ export default function PetDetailPage({ params }: { params: Promise<{ petId: str
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>
 
-          <Link href={`/pets/${petId}/reminders`} className="flex items-center justify-between p-4 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
+          <Link href={petHref(petId, 'reminders')} className="flex items-center justify-between p-4 rounded-xl border bg-card hover:bg-accent/50 transition-colors">
             <div className="flex items-center gap-3">
               <Bell className="h-5 w-5 text-primary" />
               <div>
@@ -209,5 +211,13 @@ export default function PetDetailPage({ params }: { params: Promise<{ petId: str
         </AlertDialog>
       </PageShell>
     </>
+  )
+}
+
+export default function PetDetailPage() {
+  return (
+    <Suspense fallback={null}>
+      <PetDetailContent />
+    </Suspense>
   )
 }

@@ -1,7 +1,7 @@
 "use client"
 
-import { use, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useMemo, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { TopBar } from '@/src/components/layout/TopBar'
 import { PageShell } from '@/src/components/layout/PageShell'
 import { WeightChart } from '@/src/components/weight/WeightChart'
@@ -15,19 +15,24 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/src/componen
 import { Plus } from 'lucide-react'
 import { todayISO, formatDate } from '@/src/lib/date-utils'
 import { cn } from '@/src/lib/utils'
-import { v4 as uuidv4 } from 'uuid'
+import { petHref } from '@/src/lib/pet-path'
 
-export default function WeightPage({ params }: { params: Promise<{ petId: string }> }) {
-  const { petId } = use(params)
+function WeightContent() {
+  const searchParams = useSearchParams()
+  const petId = searchParams.get('id') ?? ''
   const pet = usePetStore((s) => s.getPet(petId))
-  const weightEntries = useHealthRecordStore((s) =>
-    s.getRecordsByType(petId, 'weight_entry') as WeightEntry[]
-  )
+  const allRecords = useHealthRecordStore((s) => s.records)
   const addRecord = useHealthRecordStore((s) => s.addRecord)
   const [open, setOpen] = useState(false)
   const [weight, setWeight] = useState('')
   const [unit, setUnit] = useState<'kg' | 'lbs'>(pet?.weightUnit ?? 'kg')
   const [date, setDate] = useState(todayISO())
+
+  const weightEntries = useMemo(() =>
+    (allRecords
+      .filter((r) => r.petId === petId && r.type === 'weight_entry')
+      .sort((a, b) => b.recordedAt.localeCompare(a.recordedAt))) as WeightEntry[]
+  , [allRecords, petId])
 
   const handleAdd = () => {
     const val = parseFloat(weight)
@@ -49,7 +54,7 @@ export default function WeightPage({ params }: { params: Promise<{ petId: string
       <TopBar
         title={`${pet?.name ?? ''} 体重追踪`}
         showBack
-        backHref={`/pets/${petId}`}
+        backHref={petHref(petId)}
         right={
           <Button size="sm" variant="ghost" onClick={() => setOpen(true)}>
             <Plus className="h-5 w-5" />
@@ -61,7 +66,6 @@ export default function WeightPage({ params }: { params: Promise<{ petId: string
           <WeightChart entries={weightEntries} unit={pet?.weightUnit ?? 'kg'} />
         </div>
 
-        {/* History list */}
         {weightEntries.length > 0 && (
           <div className="space-y-2">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">历史记录</p>
@@ -126,5 +130,13 @@ export default function WeightPage({ params }: { params: Promise<{ petId: string
         </DialogContent>
       </Dialog>
     </>
+  )
+}
+
+export default function WeightPage() {
+  return (
+    <Suspense fallback={null}>
+      <WeightContent />
+    </Suspense>
   )
 }

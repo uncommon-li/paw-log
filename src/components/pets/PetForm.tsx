@@ -9,7 +9,7 @@ import { Textarea } from '@/src/components/ui/textarea'
 import { cn } from '@/src/lib/utils'
 import { useRef } from 'react'
 
-type PetFormData = Omit<Pet, 'id' | 'createdAt' | 'updatedAt'>
+type PetFormData = Omit<Pet, 'id' | 'createdAt' | 'updatedAt'> & { initialWeight?: number }
 
 interface PetFormProps {
   defaultValues?: Partial<PetFormData>
@@ -170,6 +170,22 @@ export function PetForm({ defaultValues, onSubmit, submitLabel = '保存' }: Pet
               {u}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Initial weight */}
+      <div className="space-y-1">
+        <Label htmlFor="initialWeight">当前体重（选填）</Label>
+        <div className="flex gap-2">
+          <Input
+            id="initialWeight"
+            type="number"
+            step="0.01"
+            placeholder="0.00"
+            className="flex-1"
+            {...register('initialWeight', { valueAsNumber: true })}
+          />
+          <span className="flex items-center text-sm text-muted-foreground px-2">{watch('weightUnit')}</span>
         </div>
       </div>
 
