@@ -102,3 +102,5 @@ Web 版本可以部署到支持 Next.js 静态/服务端构建的平台。项目
 ## 开发提示
 
 本项目使用较新的 Next.js 版本。修改 Next.js 相关配置或 App Router 行为前，请优先查看项目依赖中 `node_modules/next/dist/docs/` 下的对应文档，避免沿用旧版本约定。
+
+
